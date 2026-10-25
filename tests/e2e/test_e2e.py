@@ -12,8 +12,11 @@ def test_calculator_addition():
         page.fill("#b", "3")
         page.click("button#add")
 
-        result = page.inner_text("#result")
+        page.wait_for_function(
+    "document.querySelector('#result').innerText === 'Result: 5'"
+)
+result = page.inner_text("#result")
 
-        assert result == "Result: 5"
+assert result == "Result: 5"
 
         browser.close()
