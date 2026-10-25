@@ -15,8 +15,8 @@ def test_calculator_addition():
         page.wait_for_function(
     "document.querySelector('#result').innerText === 'Result: 5'"
 )
-result = page.inner_text("#result")
+        result = page.inner_text("#result")
 
-assert result == "Result: 5"
+        assert result == "Result: 5"
 
         browser.close()
