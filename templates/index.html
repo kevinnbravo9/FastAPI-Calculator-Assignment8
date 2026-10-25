@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FastAPI Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 350px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+        <h1>FastAPI Calculator</h1>
+
+        <input id="a" type="number" placeholder="First number">
+        <input id="b" type="number" placeholder="Second number">
+
+        <div>
+            <button id="add" onclick="calculate('add')">Add</button>
+            <button id="subtract" onclick="calculate('subtract')">Subtract</button>
+            <button id="multiply" onclick="calculate('multiply')">Multiply</button>
+            <button id="divide" onclick="calculate('divide')">Divide</button>
+        </div>
+
+        <div id="result">Result:</div>
+    </div>
+
+    <script>
+        async function calculate(operation) {
+            const a = parseFloat(document.getElementById("a").value);
+            const b = parseFloat(document.getElementById("b").value);
+            const resultElement = document.getElementById("result");
+
+            if (isNaN(a) || isNaN(b)) {
+                resultElement.innerText = "Please enter two numbers";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/${operation}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ a: a, b: b })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultElement.innerText = `Result: ${data.result}`;
+                } else {
+                    resultElement.innerText = `Error: ${data.detail}`;
+                }
+            } catch (error) {
+                resultElement.innerText = "Error connecting to the server";
+            }
+        }
+    </script>
+
+</body>
+</html>
